@@ -1,0 +1,26 @@
+{
+  "name": "residential-hub",
+  "version": "0.0.1",
+  "description": "Backend for residential community management with Express.js, integrating MongoDB and PostgreSQL databases for administration and bookings",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/castellarmartinez/residential-hub.git"
+  },
+  "author": "David Castellar Martinez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/castellarmartinez/residential-hub/issues"
+  },
+  "homepage": "https://github.com/castellarmartinez/residential-hub#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
