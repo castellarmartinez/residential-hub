@@ -1,6 +1,6 @@
 export class User {
   constructor(
-    private readonly id: number,
+    private readonly id: string,
     private email: string,
     private password: string,
     private lastNames?: string,
