@@ -3,8 +3,8 @@ export class User {
     private readonly id: string,
     private email: string,
     private password: string,
-    private lastNames?: string,
     private names?: string,
+    private lastNames?: string,
     private associations?: string[],
     private units?: string[]
   ) {}

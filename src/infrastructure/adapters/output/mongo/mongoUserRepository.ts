@@ -12,4 +12,17 @@ export class MongoUserRepository implements UserOutputPort {
       lastNames: user.getLastNames(),
     });
   }
+
+  async findAll(): Promise<User[]> | never {
+    return (await MongoUser.find({})).map(
+      (user) =>
+        new User(
+          user._id,
+          user.email,
+          user.password,
+          user.names,
+          user.lastNames
+        )
+    );
+  }
 }

@@ -13,7 +13,7 @@ export class CreateUserInputPort implements CreateUserUseCase {
     names: string,
     lastNames: string
   ): Promise<User> | never {
-    const user = new User(uuidv4(), email, password, lastNames, names);
+    const user = new User(uuidv4(), email, password, names, lastNames);
     await this.userRepository.save(user);
 
     return user;
