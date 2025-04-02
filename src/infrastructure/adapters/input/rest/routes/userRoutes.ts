@@ -8,6 +8,7 @@ import { GetUserByIdInputPort } from "../../../../../application/ports/input/use
 import { validateId } from "../middlewares/validateId";
 import { UpdateUserInputPort } from "../../../../../application/ports/input/user/updateUserInputPort";
 import { validateUserFieldsForUpdate } from "../middlewares/validateUserFieldsForUpdate";
+import { DeleteUserInputPort } from "../../../../../application/ports/input/user/deleteUserInputPort";
 
 export const userRouter = express.Router();
 
@@ -17,12 +18,14 @@ const createUserUseCase = new CreateUserInputPort(userRepository);
 const getUsersUseCase = new GetUsersInputPort(userRepository);
 const getUserByIdUseCase = new GetUserByIdInputPort(userRepository);
 const updateUserUseCase = new UpdateUserInputPort(userRepository);
+const deleteUserUseCase = new DeleteUserInputPort(userRepository);
 
 const userController = new UserController(
   createUserUseCase,
   getUsersUseCase,
   getUserByIdUseCase,
-  updateUserUseCase
+  updateUserUseCase,
+  deleteUserUseCase
 );
 
 userRouter.post("/", validateUserFieldsForCreation, userController.create);
@@ -34,3 +37,4 @@ userRouter.patch(
   validateUserFieldsForUpdate,
   userController.update
 );
+userRouter.delete("/:id", validateId, userController.delete);

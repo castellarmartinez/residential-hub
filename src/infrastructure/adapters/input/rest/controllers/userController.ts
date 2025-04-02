@@ -4,13 +4,15 @@ import { CreateUserUseCase } from "../../../../../application/usecases/user/crea
 import { GetUsersUseCase } from "../../../../../application/usecases/user/getUsersUseCase";
 import { GetUserByIdUseCase } from "../../../../../application/usecases/user/getUserByIdUseCase";
 import { UpdateUserUseCase } from "../../../../../application/usecases/user/updateUserUseCase";
+import { DeleteUserUseCase } from "../../../../../application/usecases/user/deleteUserUseCase";
 
 export class UserController {
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly getUsersUseCase: GetUsersUseCase,
     private readonly getUserByIdUseCase: GetUserByIdUseCase,
-    private readonly updateUserUseCase: UpdateUserUseCase
+    private readonly updateUserUseCase: UpdateUserUseCase,
+    private readonly deleteUserUseCase: DeleteUserUseCase
   ) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
@@ -65,6 +67,18 @@ export class UserController {
       const user = await this.updateUserUseCase.execute(id, req.body);
 
       res.status(200).json({ user });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  delete = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+
+      await this.deleteUserUseCase.execute(id);
+
+      res.status(204).send();
     } catch (error) {
       next(error);
     }

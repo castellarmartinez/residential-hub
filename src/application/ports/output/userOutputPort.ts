@@ -6,4 +6,5 @@ export interface UserOutputPort {
   findAll(): Promise<User[]> | never;
   findById(id: string): Promise<User> | never;
   update(id: string, fieldsToUpdate: TUser): Promise<User> | never;
+  delete(id: string): Promise<void> | never;
 }

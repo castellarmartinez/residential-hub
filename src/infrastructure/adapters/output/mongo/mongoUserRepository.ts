@@ -45,7 +45,7 @@ export class MongoUserRepository implements UserOutputPort {
   }
 
   async update(id: string, fieldsToUpdate: TUser): Promise<User> | never {
-    const updatedUser = await MongoUser.findOneAndUpdate(
+    const updatedUser = await MongoUser.findByIdAndUpdate(
       { _id: id },
       { $set: { ...fieldsToUpdate } },
       { new: true }
@@ -62,5 +62,13 @@ export class MongoUserRepository implements UserOutputPort {
       updatedUser.names,
       updatedUser.lastNames
     );
+  }
+
+  async delete(id: string): Promise<void> | never {
+    const user = await MongoUser.findByIdAndDelete({ _id: id });
+
+    if (!user) {
+      throw new NotFoundError(`User with id=${id} does not exist`);
+    }
   }
 }
