@@ -1,6 +1,7 @@
 import { UserOutputPort } from "../../../../application/ports/output/userOutputPort";
 import { User } from "../../../../domain/entities/user";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
+import { TUser } from "../../../../domain/types/userType";
 import { MongoUser } from "./mongoUserModel";
 
 export class MongoUserRepository implements UserOutputPort {
@@ -41,5 +42,25 @@ export class MongoUserRepository implements UserOutputPort {
     }
 
     throw new NotFoundError(`User with id=${id} does not exist`);
+  }
+
+  async update(id: string, fieldsToUpdate: TUser): Promise<User> | never {
+    const updatedUser = await MongoUser.findOneAndUpdate(
+      { _id: id },
+      { $set: { ...fieldsToUpdate } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      throw new NotFoundError(`User with id=${id} does not exist`);
+    }
+
+    return new User(
+      updatedUser._id,
+      updatedUser.email,
+      updatedUser.password,
+      updatedUser.names,
+      updatedUser.lastNames
+    );
   }
 }

@@ -5,11 +5,14 @@ import Joi from "joi";
 const UserSchema = Joi.object({
   names: Joi.string().strict(),
   lastNames: Joi.string().strict(),
-  email: Joi.string().strict().required(),
-  password: Joi.string().strict().required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+  password: Joi.string().strict(),
 });
 
-export const validateUserFields = (
+export const validateUserFieldsForUpdate = (
   req: Request,
   _res: Response,
   next: NextFunction
