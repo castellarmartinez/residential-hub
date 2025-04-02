@@ -7,9 +7,8 @@ import { GetAssociationsInputPort } from "../../../../../application/ports/input
 import { UpdateAssociationInputPort } from "../../../../../application/ports/input/association/updateAssociationInputPort";
 import { MongoAssociationRepository } from "../../../output/mongo/mongoAssociationRepository";
 import { AssociationController } from "../controllers/associationController";
-import { validateAssociationFieldsForCreation } from "../middlewares/validateAssociationFieldsForCreation";
-import { validateAssociationFieldsForUpdate } from "../middlewares/validateAssociationFieldsForUpdate";
-import { validateId } from "../middlewares/validateId";
+import { validateId } from "../middlewares/validateParamsId";
+import { AssociationMiddleware } from "../middlewares/associationMiddleware";
 
 export const associationRouter = express.Router();
 
@@ -39,17 +38,23 @@ const associationController = new AssociationController(
   deleteAssociationUseCase
 );
 
+const associationMiddleware = new AssociationMiddleware();
+
 associationRouter.post(
   "/",
-  validateAssociationFieldsForCreation,
+  associationMiddleware.validateCreationFields,
   associationController.create
 );
+
 associationRouter.get("/", associationController.getAll);
+
 associationRouter.get("/:id", validateId, associationController.getById);
+
 associationRouter.patch(
   "/:id",
   validateId,
-  validateAssociationFieldsForUpdate,
+  associationMiddleware.validateUpdateFields,
   associationController.update
 );
+
 associationRouter.delete("/:id", validateId, associationController.delete);
