@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { isHttpError } from "http-errors";
+import { NotFoundError } from "../../../../../domain/errors/notFoundError";
 
 export function errorHandler(
   err: unknown,
@@ -11,6 +12,11 @@ export function errorHandler(
 
   if (isHttpError(err)) {
     res.status(err.statusCode).json({ error: err.message });
+    return;
+  }
+
+  if (err instanceof NotFoundError) {
+    res.status(404).json({ error: err.message });
     return;
   }
 

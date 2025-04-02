@@ -1,5 +1,6 @@
 import { UserOutputPort } from "../../../../application/ports/output/userOutputPort";
 import { User } from "../../../../domain/entities/user";
+import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { MongoUser } from "./mongoUserModel";
 
 export class MongoUserRepository implements UserOutputPort {
@@ -24,5 +25,21 @@ export class MongoUserRepository implements UserOutputPort {
           user.lastNames
         )
     );
+  }
+
+  async findById(id: string): Promise<User> | never {
+    const user = await MongoUser.findOne({ _id: id });
+
+    if (user) {
+      return new User(
+        user._id,
+        user.email,
+        user.password,
+        user.names,
+        user.names
+      );
+    }
+
+    throw new NotFoundError(`User with id=${id} does not exist`);
   }
 }
