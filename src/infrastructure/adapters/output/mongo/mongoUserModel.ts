@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 interface IUser {
-  id: string;
+  _id: string;
   email: string;
   password: string;
   names?: string;
@@ -9,7 +9,7 @@ interface IUser {
 }
 
 const userSchema = new Schema<IUser>({
-  id: {
+  _id: {
     type: String,
     required: true,
   },
@@ -31,4 +31,4 @@ const userSchema = new Schema<IUser>({
   },
 });
 
-export const Users = model<IUser>("User", userSchema);
+export const MongoUser = model<IUser>("User", userSchema);

@@ -1,9 +1,15 @@
 import { UserOutputPort } from "../../../../application/ports/output/userOutputPort";
 import { User } from "../../../../domain/entities/user";
-import { Users } from "./mongoUserModel";
+import { MongoUser } from "./mongoUserModel";
 
 export class MongoUserRepository implements UserOutputPort {
   async save(user: User): Promise<void> | never {
-    Users.create(user);
+    MongoUser.create({
+      _id: user.getId(),
+      email: user.getEmail(),
+      password: user.getPassword(),
+      names: user.getNames(),
+      lastNames: user.getLastNames(),
+    });
   }
 }

@@ -10,8 +10,8 @@ export class CreateUserInputPort implements CreateUserUseCase {
   public async execute(
     email: string,
     password: string,
-    lastNames: string,
-    names: string
+    names: string,
+    lastNames: string
   ): Promise<User> | never {
     const user = new User(uuidv4(), email, password, lastNames, names);
     await this.userRepository.save(user);
