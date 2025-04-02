@@ -50,10 +50,10 @@ export class UserController {
     try {
       const { id } = req.params;
 
-      const users = await this.getUserByIdUseCase.execute(id);
+      const user = await this.getUserByIdUseCase.execute(id);
 
       res.status(200).json({
-        users,
+        users: user,
       });
     } catch (error) {
       next(error);

@@ -1,9 +1,9 @@
 export class Unit {
   constructor(
-    public readonly id: string,
-    public name: string,
-    public associationId?: string,
-    public users?: string[]
+    private readonly id: string,
+    private name: string,
+    private associationId?: string,
+    private users?: string[]
   ) {}
 
   // Getters
