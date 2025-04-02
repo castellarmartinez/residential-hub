@@ -1,5 +1,4 @@
 import { User } from "../../../../domain/entities/user";
-import { TUser } from "../../../../domain/types/userType";
 import { UpdateUserUseCase } from "../../../usecases/user/updateUserUseCase";
 import { UserOutputPort } from "../../output/userOutputPort";
 
@@ -8,7 +7,7 @@ export class UpdateUserInputPort implements UpdateUserUseCase {
 
   public async execute(
     id: string,
-    fieldsToUpdate: TUser
+    fieldsToUpdate: Partial<User>
   ): Promise<User> | never {
     return this.userRepository.update(id, fieldsToUpdate);
   }

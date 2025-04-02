@@ -1,5 +1,4 @@
 import { Association } from "../../../../domain/entities/association";
-import { TAssociation } from "../../../../domain/types/associationType";
 import { UpdateAssociationUseCase } from "../../../usecases/association/updateAssociationUseCase";
 import { AssociationOutputPort } from "../../output/associationOutputPort";
 
@@ -8,7 +7,7 @@ export class UpdateAssociationInputPort implements UpdateAssociationUseCase {
 
   public async execute(
     id: string,
-    fieldsToUpdate: TAssociation
+    fieldsToUpdate: Partial<Association>
   ): Promise<Association> | never {
     return this.associationRepository.update(id, fieldsToUpdate);
   }

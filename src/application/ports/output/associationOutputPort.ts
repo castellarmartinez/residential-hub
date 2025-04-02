@@ -1,5 +1,4 @@
 import { Association } from "../../../domain/entities/association";
-import { TAssociation } from "../../../domain/types/associationType";
 
 export interface AssociationOutputPort {
   save(user: Association): Promise<void> | never;
@@ -7,7 +6,7 @@ export interface AssociationOutputPort {
   findById(id: string): Promise<Association> | never;
   update(
     id: string,
-    fieldsToUpdate: TAssociation
+    fieldsToUpdate: Partial<Association>
   ): Promise<Association> | never;
   delete(id: string): Promise<void> | never;
 }

@@ -1,7 +1,6 @@
 import { AssociationOutputPort } from "../../../../application/ports/output/associationOutputPort";
 import { Association } from "../../../../domain/entities/association";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { TAssociation } from "../../../../domain/types/associationType";
 import { MongoAssociation } from "./mongoAssociationModel";
 
 export class MongoAssociationRepository implements AssociationOutputPort {
@@ -36,7 +35,7 @@ export class MongoAssociationRepository implements AssociationOutputPort {
 
   async update(
     id: string,
-    fieldsToUpdate: TAssociation
+    fieldsToUpdate: Partial<Association>
   ): Promise<Association> | never {
     const updatedAssociation = await MongoAssociation.findByIdAndUpdate(
       { _id: id },
