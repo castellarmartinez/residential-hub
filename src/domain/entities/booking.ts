@@ -1,6 +1,7 @@
 export class Booking {
   constructor(
     private readonly id: string,
+    private date?: string,
     private timeStart?: string,
     private timeEnd?: string,
     private userId?: string,
@@ -11,6 +12,10 @@ export class Booking {
   // Getters
   public getId() {
     return this.id;
+  }
+
+  public getDate() {
+    return this.date;
   }
 
   public getTimeStart() {
