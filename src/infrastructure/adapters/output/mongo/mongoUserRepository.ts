@@ -11,24 +11,34 @@ export class MongoUserRepository implements UserOutputPort {
       password: user.getPassword(),
       names: user.getNames(),
       lastNames: user.getLastNames(),
+      units: user.getUnits(),
+      associations: user.getAssociations(),
     });
   }
 
   async findAll(): Promise<User[]> | never {
-    return (await MongoUser.find({})).map(
+    const users = await MongoUser.find({})
+      .populate({ path: "units", select: "-users -associationId -__v" })
+      .populate({ path: "associations", select: "-units -users -__v" });
+
+    return users.map(
       (user) =>
         new User(
           user._id,
           user.email,
           user.password,
           user.names,
-          user.lastNames
+          user.lastNames,
+          user.associations,
+          user.units
         )
     );
   }
 
   async findById(id: string): Promise<User> | never {
-    const user = await MongoUser.findOne({ _id: id });
+    const user = await MongoUser.findOne({ _id: id })
+      .populate({ path: "units", select: "-users -associationId -__v" })
+      .populate({ path: "associations", select: "-units -users -__v" });
 
     if (user) {
       return new User(
@@ -36,7 +46,9 @@ export class MongoUserRepository implements UserOutputPort {
         user.email,
         user.password,
         user.names,
-        user.names
+        user.names,
+        user.associations,
+        user.units
       );
     }
 
@@ -51,7 +63,9 @@ export class MongoUserRepository implements UserOutputPort {
       { _id: id },
       { $set: { ...fieldsToUpdate } },
       { new: true }
-    );
+    )
+      .populate({ path: "units", select: "-users -associationId -__v" })
+      .populate({ path: "associations", select: "-units -users -__v" });
 
     if (!updatedUser) {
       throw new NotFoundError(`User with id=${id} does not exist`);
@@ -62,7 +76,9 @@ export class MongoUserRepository implements UserOutputPort {
       updatedUser.email,
       updatedUser.password,
       updatedUser.names,
-      updatedUser.lastNames
+      updatedUser.lastNames,
+      updatedUser.associations,
+      updatedUser.units
     );
   }
 

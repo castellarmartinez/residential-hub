@@ -5,6 +5,8 @@ export interface CreateUserUseCase {
     email: string,
     password: string,
     names: string,
-    lastNames: string
+    lastNames: string,
+    associations: string[],
+    units: string[]
   ): Promise<User> | never;
 }

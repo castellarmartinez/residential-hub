@@ -5,6 +5,9 @@ interface IBooking {
   date?: string;
   timeStart?: string;
   timeEnd?: string;
+  userId?: string;
+  amenityId?: string;
+  associationId?: string;
 }
 
 const bookingSchema = new Schema<IBooking>({
@@ -23,6 +26,18 @@ const bookingSchema = new Schema<IBooking>({
   timeEnd: {
     type: String,
     required: false,
+  },
+  userId: {
+    type: String,
+    ref: "User",
+  },
+  amenityId: {
+    type: String,
+    ref: "Amenity",
+  },
+  associationId: {
+    type: String,
+    ref: "Association",
   },
 });
 

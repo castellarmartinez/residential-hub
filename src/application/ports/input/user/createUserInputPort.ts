@@ -11,9 +11,19 @@ export class CreateUserInputPort implements CreateUserUseCase {
     email: string,
     password: string,
     names: string,
-    lastNames: string
+    lastNames: string,
+    associations: string[],
+    units: string[]
   ): Promise<User> | never {
-    const user = new User(uuidv4(), email, password, names, lastNames);
+    const user = new User(
+      uuidv4(),
+      email,
+      password,
+      names,
+      lastNames,
+      associations,
+      units
+    );
     await this.userRepository.save(user);
 
     return user;

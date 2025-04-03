@@ -17,7 +17,12 @@ export class MongoAmenityRepository implements AmenityOutputPort {
   }
 
   async findAll(): Promise<Amenity[]> | never {
-    return (await MongoAmenity.find({})).map(
+    const amenities = await MongoAmenity.find({}).populate({
+      path: "associationId",
+      select: "-units -users -__v",
+    });
+
+    return amenities.map(
       (amenity) =>
         new Amenity(
           amenity._id,
@@ -32,7 +37,10 @@ export class MongoAmenityRepository implements AmenityOutputPort {
   }
 
   async findById(id: string): Promise<Amenity> | never {
-    const amenity = await MongoAmenity.findOne({ _id: id });
+    const amenity = await MongoAmenity.findOne({ _id: id }).populate({
+      path: "associationId",
+      select: "-units -users -__v",
+    });
 
     if (amenity) {
       return new Amenity(
@@ -57,7 +65,10 @@ export class MongoAmenityRepository implements AmenityOutputPort {
       { _id: id },
       { $set: { ...fieldsToUpdate } },
       { new: true }
-    );
+    ).populate({
+      path: "associationId",
+      select: "-units -users -__v",
+    });
 
     if (!updatedAmenity) {
       throw new NotFoundError(`Amenity with id=${id} does not exist`);

@@ -17,13 +17,16 @@ export class UserController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password, names, lastNames } = req.body;
+      const { email, password, names, lastNames, associations, units } =
+        req.body;
 
       const user = await this.createUserUseCase.execute(
         email,
         password,
         names,
-        lastNames
+        lastNames,
+        associations,
+        units
       );
 
       res.status(201).json({

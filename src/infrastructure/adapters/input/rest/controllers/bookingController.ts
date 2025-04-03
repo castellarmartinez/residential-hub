@@ -16,12 +16,16 @@ export class BookingController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { date, timeStart, timeEnd } = req.body;
+      const { date, timeStart, timeEnd, userId, amenityId, associationId } =
+        req.body;
 
       const booking = await this.createBookingUseCase.execute(
         date,
         timeStart,
-        timeEnd
+        timeEnd,
+        userId,
+        amenityId,
+        associationId
       );
 
       res.status(201).json({

@@ -2,7 +2,9 @@ export class Association {
   constructor(
     private readonly id: string,
     private name: string,
-    private address?: string
+    private address?: string,
+    private units?: string[],
+    private users?: string[]
   ) {}
 
   // Getters
@@ -16,5 +18,13 @@ export class Association {
 
   public getAddress() {
     return this.address;
+  }
+
+  public getUnits() {
+    return this.units;
+  }
+
+  public getUsers() {
+    return this.users;
   }
 }

@@ -10,9 +10,20 @@ export class CreateBookingInputPort implements CreateBookingUseCase {
   public async execute(
     date: string,
     timeStart: string,
-    timeEnd: string
+    timeEnd: string,
+    userId: string,
+    amenityId: string,
+    associationId: string
   ): Promise<Booking> | never {
-    const booking = new Booking(uuidv4(), date, timeStart, timeEnd);
+    const booking = new Booking(
+      uuidv4(),
+      date,
+      timeStart,
+      timeEnd,
+      userId,
+      amenityId,
+      associationId
+    );
     await this.bookingRepository.save(booking);
 
     return booking;

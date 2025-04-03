@@ -4,6 +4,8 @@ interface IAssociation {
   _id: string;
   name: string;
   address?: string;
+  units?: string[];
+  users?: string[];
 }
 
 const associationSchema = new Schema<IAssociation>({
@@ -19,6 +21,21 @@ const associationSchema = new Schema<IAssociation>({
     type: String,
     required: false,
   },
+  units: [
+    {
+      type: String,
+      ref: "Unit",
+    },
+  ],
+  users: [
+    {
+      type: String,
+      ref: "User",
+    },
+  ],
 });
 
-export const MongoAssociation = model<IAssociation>("Association", associationSchema);
+export const MongoAssociation = model<IAssociation>(
+  "Association",
+  associationSchema
+);

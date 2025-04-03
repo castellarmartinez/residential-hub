@@ -13,9 +13,9 @@ export class CreateAssociationInputPort implements CreateAssociationUseCase {
     units: string[],
     users: string[]
   ): Promise<Association> | never {
-    const user = new Association(uuidv4(), name, address, units, users);
-    await this.associationRepository.save(user);
+    const association = new Association(uuidv4(), name, address, units, users);
+    await this.associationRepository.save(association);
 
-    return user;
+    return association;
   }
 }

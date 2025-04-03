@@ -16,11 +16,13 @@ export class AssociationController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, address } = req.body;
+      const { name, address, units, users } = req.body;
 
       const association = await this.createAssociationUseCase.execute(
         name,
-        address
+        address,
+        units,
+        users
       );
 
       res.status(201).json({
