@@ -26,7 +26,7 @@ export class MongoUnitRepository implements UnitOutputPort {
       return new Unit(unit._id, unit.name, unit.associationId, unit.users);
     }
 
-    throw new NotFoundError(`User with id=${id} does not exist`);
+    throw new NotFoundError(`Unit with id=${id} does not exist`);
   }
 
   async update(
@@ -40,7 +40,7 @@ export class MongoUnitRepository implements UnitOutputPort {
     );
 
     if (!updatedUnit) {
-      throw new NotFoundError(`User with id=${id} does not exist`);
+      throw new NotFoundError(`Unit with id=${id} does not exist`);
     }
 
     return new Unit(
@@ -55,7 +55,7 @@ export class MongoUnitRepository implements UnitOutputPort {
     const unit = await MongoUnit.findByIdAndDelete({ _id: id });
 
     if (!unit) {
-      throw new NotFoundError(`User with id=${id} does not exist`);
+      throw new NotFoundError(`Unit with id=${id} does not exist`);
     }
   }
 }

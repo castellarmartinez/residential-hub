@@ -46,7 +46,7 @@ export class MongoAmenityRepository implements AmenityOutputPort {
       );
     }
 
-    throw new NotFoundError(`User with id=${id} does not exist`);
+    throw new NotFoundError(`Amenity with id=${id} does not exist`);
   }
 
   async update(
@@ -60,7 +60,7 @@ export class MongoAmenityRepository implements AmenityOutputPort {
     );
 
     if (!updatedAmenity) {
-      throw new NotFoundError(`User with id=${id} does not exist`);
+      throw new NotFoundError(`Amenity with id=${id} does not exist`);
     }
 
     return new Amenity(
@@ -78,7 +78,7 @@ export class MongoAmenityRepository implements AmenityOutputPort {
     const amenity = await MongoAmenity.findByIdAndDelete({ _id: id });
 
     if (!amenity) {
-      throw new NotFoundError(`User with id=${id} does not exist`);
+      throw new NotFoundError(`Amenity with id=${id} does not exist`);
     }
   }
 }

@@ -30,7 +30,7 @@ export class MongoAssociationRepository implements AssociationOutputPort {
       );
     }
 
-    throw new NotFoundError(`User with id=${id} does not exist`);
+    throw new NotFoundError(`Association with id=${id} does not exist`);
   }
 
   async update(
@@ -44,7 +44,7 @@ export class MongoAssociationRepository implements AssociationOutputPort {
     );
 
     if (!updatedAssociation) {
-      throw new NotFoundError(`User with id=${id} does not exist`);
+      throw new NotFoundError(`Association with id=${id} does not exist`);
     }
 
     return new Association(
@@ -58,7 +58,7 @@ export class MongoAssociationRepository implements AssociationOutputPort {
     const association = await MongoAssociation.findByIdAndDelete({ _id: id });
 
     if (!association) {
-      throw new NotFoundError(`User with id=${id} does not exist`);
+      throw new NotFoundError(`Association with id=${id} does not exist`);
     }
   }
 }
