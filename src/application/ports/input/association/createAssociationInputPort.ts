@@ -9,9 +9,11 @@ export class CreateAssociationInputPort implements CreateAssociationUseCase {
 
   public async execute(
     name: string,
-    address: string
+    address: string,
+    units: string[],
+    users: string[]
   ): Promise<Association> | never {
-    const user = new Association(uuidv4(), name, address);
+    const user = new Association(uuidv4(), name, address, units, users);
     await this.associationRepository.save(user);
 
     return user;
