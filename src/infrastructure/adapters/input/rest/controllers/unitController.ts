@@ -64,7 +64,7 @@ export class UnitController {
 
       const unit = await this.updateUnitUseCase.execute(id, req.body);
 
-      res.status(200).json({ user: unit });
+      res.status(200).json({ unit });
     } catch (error) {
       next(error);
     }
