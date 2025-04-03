@@ -5,7 +5,7 @@ import { MongoUnit } from "./mongoUnitModel";
 
 export class MongoUnitRepository implements UnitOutputPort {
   async save(unit: Unit): Promise<void> | never {
-    MongoUnit.create({
+    await MongoUnit.create({
       _id: unit.getId(),
       name: unit.getName(),
       associationId: unit.getAssociationId(),

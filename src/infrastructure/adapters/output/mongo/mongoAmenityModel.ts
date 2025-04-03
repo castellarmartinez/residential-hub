@@ -33,7 +33,7 @@ const amenitySchema = new Schema<IAmenity>({
   },
   closingTime: {
     type: String,
-    required: true,
+    required: false,
   },
   associationId: {
     type: String,

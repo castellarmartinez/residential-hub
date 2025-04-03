@@ -5,7 +5,7 @@ import { MongoAssociation } from "./mongoAssociationModel";
 
 export class MongoAssociationRepository implements AssociationOutputPort {
   async save(association: Association): Promise<void> | never {
-    MongoAssociation.create({
+    await MongoAssociation.create({
       _id: association.getId(),
       name: association.getName(),
       address: association.getAddress(),

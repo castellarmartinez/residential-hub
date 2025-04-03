@@ -5,7 +5,7 @@ import { MongoUser } from "./mongoUserModel";
 
 export class MongoUserRepository implements UserOutputPort {
   async save(user: User): Promise<void> | never {
-    MongoUser.create({
+    await MongoUser.create({
       _id: user.getId(),
       email: user.getEmail(),
       password: user.getPassword(),
