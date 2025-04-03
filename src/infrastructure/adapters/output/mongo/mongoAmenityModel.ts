@@ -37,7 +37,7 @@ const amenitySchema = new Schema<IAmenity>({
   },
   associationId: {
     type: String,
-    required: false,
+    ref: "Association",
   },
 });
 

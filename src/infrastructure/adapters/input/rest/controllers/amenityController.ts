@@ -42,9 +42,12 @@ export class AmenityController {
     }
   };
 
-  getAll = async (_req: Request, res: Response, next: NextFunction) => {
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const amenities = await this.getAmenitiesUseCase.execute();
+      const { association } = req.query;
+      const amenities = await this.getAmenitiesUseCase.execute(
+        association as string
+      );
 
       res.status(200).json({
         amenities,

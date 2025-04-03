@@ -1,5 +1,5 @@
 import { Unit } from "../../../domain/entities/unit";
 
 export interface GetUnitsUseCase {
-  execute(): Promise<Unit[]> | never;
+  execute(association?: string): Promise<Unit[]> | never;
 }

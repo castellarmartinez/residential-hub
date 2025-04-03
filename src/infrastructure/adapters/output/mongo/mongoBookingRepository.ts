@@ -10,30 +10,48 @@ export class MongoBookingRepository implements BookingOutputPort {
       date: booking.getDate(),
       timeStart: booking.getTimeStart(),
       timeEnd: booking.getTimeEnd(),
+      amenityId: booking.getAmenity(),
+      userId: booking.getUserId(),
+      associationId: booking.getAssociationId(),
     });
   }
 
-  async findAll(): Promise<Booking[]> | never {
-    return (await MongoBooking.find({})).map(
+  async findAll(associationId?: string): Promise<Booking[]> | never {
+    const query = associationId ? { associationId } : {};
+    const bookings = await MongoBooking.find(query)
+      .populate({ path: "userId", select: "-units -associations -__v" })
+      .populate({ path: "amenityId", select: "-associationId -__v" })
+      .populate({ path: "associationId", select: "-units -users -__v" });
+
+    return bookings.map(
       (booking) =>
         new Booking(
           booking._id,
           booking.date,
           booking.timeStart,
-          booking.timeEnd
+          booking.timeEnd,
+          booking.userId,
+          booking.amenityId,
+          booking.associationId
         )
     );
   }
 
   async findById(id: string): Promise<Booking> | never {
-    const booking = await MongoBooking.findOne({ _id: id });
+    const booking = await MongoBooking.findOne({ _id: id })
+      .populate({ path: "userId", select: "-units -associations -__v" })
+      .populate({ path: "amenityId", select: "-associationId -__v" })
+      .populate({ path: "associationId", select: "-units -users -__v" });
 
     if (booking) {
       return new Booking(
         booking._id,
         booking.date,
         booking.timeStart,
-        booking.timeEnd
+        booking.timeEnd,
+        booking.userId,
+        booking.amenityId,
+        booking.associationId
       );
     }
 
@@ -48,7 +66,10 @@ export class MongoBookingRepository implements BookingOutputPort {
       { _id: id },
       { $set: { ...fieldsToUpdate } },
       { new: true }
-    );
+    )
+      .populate({ path: "userId", select: "-units -associations -__v" })
+      .populate({ path: "amenityId", select: "-associationId -__v" })
+      .populate({ path: "associationId", select: "-units -users -__v" });
 
     if (!updatedBooking) {
       throw new NotFoundError(`Booking with id=${id} does not exist`);
@@ -58,7 +79,10 @@ export class MongoBookingRepository implements BookingOutputPort {
       updatedBooking._id,
       updatedBooking.date,
       updatedBooking.timeStart,
-      updatedBooking.timeEnd
+      updatedBooking.timeEnd,
+      updatedBooking.userId,
+      updatedBooking.amenityId,
+      updatedBooking.associationId
     );
   }
 

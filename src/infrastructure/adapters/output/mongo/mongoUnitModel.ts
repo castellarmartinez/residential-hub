@@ -18,12 +18,14 @@ const unitSchema = new Schema<IUnit>({
   },
   associationId: {
     type: String,
-    required: false,
+    ref: "Association",
   },
-  users: {
-    type: [String],
-    required: false,
-  },
+  users: [
+    {
+      type: String,
+      ref: "User",
+    },
+  ],
 });
 
 export const MongoUnit = model<IUnit>("Unit", unitSchema);

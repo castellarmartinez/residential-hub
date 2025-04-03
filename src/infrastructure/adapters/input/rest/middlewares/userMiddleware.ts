@@ -14,6 +14,8 @@ export class UserMiddleware {
       })
       .required(),
     password: Joi.string().strict().required(),
+    units: Joi.array().items(Joi.string().strict()),
+    associations: Joi.array().items(Joi.string().strict()),
   });
 
   private readonly updateSchema = Joi.object({
@@ -24,6 +26,8 @@ export class UserMiddleware {
       tlds: { allow: ["com", "net"] },
     }),
     password: Joi.string().strict(),
+    units: Joi.array().items(Joi.string().strict()),
+    associations: Joi.array().items(Joi.string().strict()),
   });
 
   validateCreationFields = (
