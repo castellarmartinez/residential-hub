@@ -16,8 +16,9 @@ export class MongoBookingRepository implements BookingOutputPort {
     });
   }
 
-  async findAll(): Promise<Booking[]> | never {
-    const bookings = await MongoBooking.find({})
+  async findAll(associationId?: string): Promise<Booking[]> | never {
+    const query = associationId ? { associationId } : {};
+    const bookings = await MongoBooking.find(query)
       .populate({ path: "userId", select: "-units -associations -__v" })
       .populate({ path: "amenityId", select: "-associationId -__v" })
       .populate({ path: "associationId", select: "-units -users -__v" });

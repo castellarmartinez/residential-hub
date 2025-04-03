@@ -16,8 +16,9 @@ export class MongoAmenityRepository implements AmenityOutputPort {
     });
   }
 
-  async findAll(): Promise<Amenity[]> | never {
-    const amenities = await MongoAmenity.find({}).populate({
+  async findAll(associationId?: string): Promise<Amenity[]> | never {
+    const query = associationId ? { associationId } : {};
+    const amenities = await MongoAmenity.find(query).populate({
       path: "associationId",
       select: "-units -users -__v",
     });

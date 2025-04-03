@@ -2,7 +2,7 @@ import { Amenity } from "../../../domain/entities/amenity";
 
 export interface AmenityOutputPort {
   save(amenity: Amenity): Promise<void> | never;
-  findAll(): Promise<Amenity[]> | never;
+  findAll(associationId?: string): Promise<Amenity[]> | never;
   findById(id: string): Promise<Amenity> | never;
   update(
     id: string,

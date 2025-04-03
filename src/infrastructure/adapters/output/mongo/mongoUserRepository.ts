@@ -16,8 +16,9 @@ export class MongoUserRepository implements UserOutputPort {
     });
   }
 
-  async findAll(): Promise<User[]> | never {
-    const users = await MongoUser.find({})
+  async findAll(association?: string): Promise<User[]> | never {
+    const query = association ? { associations: association } : {};
+    const users = await MongoUser.find(query)
       .populate({ path: "units", select: "-users -associationId -__v" })
       .populate({ path: "associations", select: "-units -users -__v" });
 

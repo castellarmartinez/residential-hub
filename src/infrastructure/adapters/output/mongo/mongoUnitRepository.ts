@@ -13,8 +13,9 @@ export class MongoUnitRepository implements UnitOutputPort {
     });
   }
 
-  async findAll(): Promise<Unit[]> | never {
-    const units = await MongoUnit.find({})
+  async findAll(associationId?: string): Promise<Unit[]> | never {
+    const query = associationId ? { associationId } : {};
+    const units = await MongoUnit.find(query)
       .populate({ path: "users", select: "-units -associations -__v" })
       .populate({ path: "associationId", select: "-units -users -__v" });
 

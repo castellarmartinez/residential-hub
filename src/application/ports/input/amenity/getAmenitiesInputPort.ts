@@ -5,7 +5,7 @@ import { AmenityOutputPort } from "../../output/amenityOutputPort";
 export class GetAmenitiesInputPort implements GetAmenitiesUseCase {
   constructor(private readonly amenityRepository: AmenityOutputPort) {}
 
-  public async execute(): Promise<Amenity[]> | never {
-    return this.amenityRepository.findAll();
+  public async execute(association?: string): Promise<Amenity[]> | never {
+    return this.amenityRepository.findAll(association);
   }
 }

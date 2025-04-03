@@ -37,9 +37,10 @@ export class UserController {
     }
   };
 
-  getAll = async (_req: Request, res: Response, next: NextFunction) => {
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const users = await this.getUsersUseCase.execute();
+      const { association } = req.query;
+      const users = await this.getUsersUseCase.execute(association as string);
 
       res.status(200).json({
         users,

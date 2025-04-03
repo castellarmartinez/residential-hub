@@ -5,7 +5,7 @@ import { UnitOutputPort } from "../../output/unitOutputPort";
 export class GetUnitsInputPort implements GetUnitsUseCase {
   constructor(private readonly unitRepository: UnitOutputPort) {}
 
-  public async execute(): Promise<Unit[]> | never {
-    return this.unitRepository.findAll();
+  public async execute(association?: string): Promise<Unit[]> | never {
+    return this.unitRepository.findAll(association);
   }
 }

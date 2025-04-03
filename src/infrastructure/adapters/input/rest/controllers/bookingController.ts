@@ -36,9 +36,12 @@ export class BookingController {
     }
   };
 
-  getAll = async (_req: Request, res: Response, next: NextFunction) => {
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const bookings = await this.getBookingsUseCase.execute();
+      const { association } = req.query;
+      const bookings = await this.getBookingsUseCase.execute(
+        association as string
+      );
 
       res.status(200).json({
         bookings,

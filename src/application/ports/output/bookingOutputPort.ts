@@ -2,7 +2,7 @@ import { Booking } from "../../../domain/entities/booking";
 
 export interface BookingOutputPort {
   save(booking: Booking): Promise<void> | never;
-  findAll(): Promise<Booking[]> | never;
+  findAll(associationId?: string): Promise<Booking[]> | never;
   findById(id: string): Promise<Booking> | never;
   update(
     id: string,
