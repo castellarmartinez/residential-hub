@@ -28,7 +28,11 @@ export class UserMiddleware {
     password: Joi.string().strict(),
     units: Joi.array().items(Joi.string().strict()),
     associations: Joi.array().items(Joi.string().strict()),
-  });
+  })
+    .min(1)
+    .messages({
+      "object.min": "At least one field is required to update the user",
+    });
 
   validateCreationFields = (
     req: Request,

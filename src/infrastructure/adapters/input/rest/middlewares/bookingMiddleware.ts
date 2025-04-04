@@ -10,7 +10,11 @@ export class BookingMiddleware {
     userId: Joi.string().strict(),
     associationId: Joi.string().strict(),
     amenityId: Joi.string().strict(),
-  });
+  })
+    .min(1)
+    .messages({
+      "object.min": "At least one field is required to update the user",
+    });
 
   validateCreationFields = (
     req: Request,

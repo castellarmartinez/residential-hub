@@ -19,7 +19,11 @@ export class AmenityMiddleware {
     openingTime: Joi.string().strict(),
     closingTime: Joi.string().strict(),
     associationId: Joi.string().strict(),
-  });
+  })
+    .min(1)
+    .messages({
+      "object.min": "At least one field is required to update the user",
+    });
 
   validateCreationFields = (
     req: Request,

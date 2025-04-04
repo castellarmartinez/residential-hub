@@ -16,7 +16,11 @@ export class AssociationMiddleware {
     address: Joi.string().strict(),
     units: Joi.array().items(Joi.string().strict()),
     users: Joi.array().items(Joi.string().strict()),
-  });
+  })
+    .min(1)
+    .messages({
+      "object.min": "At least one field is required to update the user",
+    });
 
   validateCreationFields = (
     req: Request,
