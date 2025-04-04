@@ -1,17 +1,19 @@
 import express from "express";
 import { UserController } from "../controllers/userController";
-import { MongoUserRepository } from "../../../output/mongo/mongoUserRepository";
+// import { MongoUserRepository } from "../../../output/mongo/mongoUserRepository";
 import { CreateUserInputPort } from "../../../../../application/ports/input/user/createUserInputPort";
-import { GetUsersInputPort } from "../../../../../application/ports/input/user/getUsersInputPort";
-import { GetUserByIdInputPort } from "../../../../../application/ports/input/user/getUserByIdInputPort";
-import { validateId } from "../middlewares/validateParamsId";
-import { UpdateUserInputPort } from "../../../../../application/ports/input/user/updateUserInputPort";
 import { DeleteUserInputPort } from "../../../../../application/ports/input/user/deleteUserInputPort";
+import { GetUserByIdInputPort } from "../../../../../application/ports/input/user/getUserByIdInputPort";
+import { GetUsersInputPort } from "../../../../../application/ports/input/user/getUsersInputPort";
+import { UpdateUserInputPort } from "../../../../../application/ports/input/user/updateUserInputPort";
+import { PostgresUserRepository } from "../../../output/postgres/postgresUserRepository";
 import { UserMiddleware } from "../middlewares/userMiddleware";
+import { validateId } from "../middlewares/validateParamsId";
 
 export const userRouter = express.Router();
 
-const userRepository = new MongoUserRepository();
+// const userRepository = new MongoUserRepository();
+const userRepository = new PostgresUserRepository();
 
 const createUserUseCase = new CreateUserInputPort(userRepository);
 const getUsersUseCase = new GetUsersInputPort(userRepository);
