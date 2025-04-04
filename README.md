@@ -5,10 +5,10 @@ This API facilitates the management of residential communities. Each community i
 
 ## Main Features
 
-- **Register users, units, associations, amenities and bookings** with information unique for every domain.
-- **Query users, units, associations, amenities and bookings** with filters by associations.
-- **Update users, units, associations, amenities and bookings** (Pending, Approved, Rejected).
-- **Remove users, units, associations, amenities and bookings**, allowing the addition of new unique categories.
+- **Register users, units, associations, amenities and bookings** with unique information for each domain.
+- **Query users, units, associations, amenities and bookings** with filtering by association.
+- **Update users, units, associations, amenities and bookings** allowing to update the fields of these resources.
+- **Remove users, units, associations, amenities and bookings**, allowing to remove these resources from the database.
 
 ## Technologies Used
 
@@ -21,16 +21,21 @@ This API facilitates the management of residential communities. Each community i
 
 ## Architecture Decisions
 
-**Hexagonal architecture (Ports and Adapters)** was the preferred choice to develop this project. This architecture allows the decouple the bussiness logic from the different frameworks, databases and 
-technologies. Also an integration with MongoDB and Postgres is desired and this architecture gives the opportunity through dependency injections to work with both databases at the same time without the need 
-of updating the bussiness logic. In the following image we can see the main components of this architecture. We have the **domain, application and framework** layers. A typical request comes from 
-**Input adapters** in the framework layer, that for this API is done with REST and Express.js framework through the controllers. From the controllers we go to the **Input Ports** in the application layer, these
-ports contain the bussiness logic to manipulate the **Entities** in the domain layer. After that, through the **Output ports** the required data is store in the database and the final response is sent back through
-the **Output adapters**. In the future we can switch from REST to GrahpQL or from MongoDB to DynamoDB without the need to change the bussiness logic.
+The **Hexagonal architecture (Ports and Adapters)** was chosen for this project to decouple business logic from frameworks, databases, and external technologies. This design enables seamless integration with both MongoDB and PostgreSQL, leveraging dependency injection to support multiple databases without modifying the business logic. The architecture consists of three main layers:**Domain, Application and Framework** . 
+
+A typical request flows as follows:
+
+1. **Input Adapters**(Framework Layer): Handled via REST using Express.js controllers.
+2. **Input Ports** (Application Layer): Contain the business logic to manipulate **Entities** in the Domain Layer.
+3. **Output Ports**: Store data in the database and return responses via **Output Adapters**.
+
+This structure allows future flexibility, such as switching from REST to GraphQL or from MongoDB to DynamoDB, without altering the core business logic.
 
 ![image](https://github.com/user-attachments/assets/73efed3d-66e9-4ba0-99b9-2d53d0d1bff2)
 
-The database (MongoDB) contains four collections: **Users, Units, Associations, Amenities and Bookings**. Next are the relationships between these tables:
+## Database Schema
+
+The MongoDB database includes five collections: **Users, Units, Associations, Amenities and Bookings**. Relationships between these collections are as follows:
 
 - A user can belong to multiple units, and a unit can have multiple users (e.g., residents or owners).
 - A unit belongs to one association, and an association can group multiple units.
@@ -52,7 +57,7 @@ npm install
 ```
 
 ### 3. Configure environment variables
-Create a `.env` file in the project root based on `.env.example`, an example is given:
+Create a `.env` file in the project root based on `.env.example` template. Example:
 
 ```env
 HOST=localhost
@@ -114,40 +119,41 @@ curl -X GET http://localhost:3000/users -i
 
 ```json
 {
-    "users": [
+  "users": [
+    {
+      "id": "e3b41036-95e8-45c0-9183-8c40ee764df2",
+      "email": "david@castellar.com",
+      "password": "mypass",
+      "lastNames": "David R",
+      "associations": [],
+      "units": []
+    },
+    {
+      "id": "b57ddb4a-f2e5-4f68-a4f6-09f409967ea0",
+      "email": "david@castellar.com",
+      "password": "mypass",
+      "names": "David R",
+      "associations": [
         {
-            "id": "e3b41036-95e8-45c0-9183-8c40ee764df2",
-            "email": "david@castellar.com",
-            "password": "mypass",
-            "lastNames": "David R",
-            "associations": [],
-            "units": []
+          "_id": "c7a14317-f8cc-445c-b05c-f4ed000981a3",
+          "name": "Conjunto Caminos",
+          "address": "Manizales"
         },
         {
-            "id": "b57ddb4a-f2e5-4f68-a4f6-09f409967ea0",
-            "email": "david@castellar.com",
-            "password": "mypass",
-            "names": "David R",
-            "associations": [
-                {
-                    "_id": "c7a14317-f8cc-445c-b05c-f4ed000981a3",
-                    "name": "Conjunto Caminos",
-                    "address": "Manizales"
-                },
-                {
-                    "_id": "8e686eab-5330-4627-bfff-7d48cd5cdbac",
-                    "name": "Conjunto Estación",
-                    "address": "Cucuta"
-                }
-            ],
-            "units": [
-                {
-                    "_id": "2f6cdcdd-41ec-468a-8bdb-ac01ce191c20",
-                    "name": "Apartamento 1212"
-                }
-            ]
-        },
-]
+          "_id": "8e686eab-5330-4627-bfff-7d48cd5cdbac",
+          "name": "Conjunto Estación",
+          "address": "Cucuta"
+        }
+      ],
+      "units": [
+        {
+          "_id": "2f6cdcdd-41ec-468a-8bdb-ac01ce191c20",
+          "name": "Apartamento 1212"
+        }
+      ]
+    },
+  ]
+}
 ```
 
 ### 3. Get all users filtered by associations
@@ -161,32 +167,33 @@ curl -X GET http://localhost:3000/users?association=8e686eab-5330-4627-bfff-7d48
 
 ```json
 {
-    "users": [
+  "users": [
+    {
+      "id": "b57ddb4a-f2e5-4f68-a4f6-09f409967ea0",
+      "email": "david@castellar.com",
+      "password": "mypass",
+      "names": "David R",
+      "associations": [
         {
-            "id": "b57ddb4a-f2e5-4f68-a4f6-09f409967ea0",
-            "email": "david@castellar.com",
-            "password": "mypass",
-            "names": "David R",
-            "associations": [
-                {
-                    "_id": "c7a14317-f8cc-445c-b05c-f4ed000981a3",
-                    "name": "Conjunto Caminos",
-                    "address": "Manizales"
-                },
-                {
-                    "_id": "8e686eab-5330-4627-bfff-7d48cd5cdbac",
-                    "name": "Conjunto Estación",
-                    "address": "Cucuta"
-                }
-            ],
-            "units": [
-                {
-                    "_id": "2f6cdcdd-41ec-468a-8bdb-ac01ce191c20",
-                    "name": "Apartamento 1212"
-                }
-            ]
+          "_id": "c7a14317-f8cc-445c-b05c-f4ed000981a3",
+          "name": "Conjunto Caminos",
+          "address": "Manizales"
         },
-]
+        {
+          "_id": "8e686eab-5330-4627-bfff-7d48cd5cdbac",
+          "name": "Conjunto Estación",
+          "address": "Cucuta"
+        }
+      ],
+      "units": [
+        {
+          "_id": "2f6cdcdd-41ec-468a-8bdb-ac01ce191c20",
+          "name": "Apartamento 1212"
+        }
+      ]
+    },
+  ]
+}
 ```
 
 ### 3. Get user by id
@@ -200,15 +207,15 @@ curl -X GET "http://localhost:3000/users/e3b41036-95e8-45c0-9183-8c40ee764df2" -
 
 ```json
 {
-    "user": {
-        "id": "e3b41036-95e8-45c0-9183-8c40ee764df2",
-        "email": "david@castellar.com",
-        "password": "mypass",
-        "names": "David Antonio",
-        "lastNames": "David R",
-        "associations": [],
-        "units": []
-    }
+  "user": {
+    "id": "e3b41036-95e8-45c0-9183-8c40ee764df2",
+    "email": "david@castellar.com",
+    "password": "mypass",
+    "names": "David Antonio",
+    "lastNames": "David R",
+    "associations": [],
+    "units": []
+  }
 }
 ```
 
@@ -223,15 +230,15 @@ curl -X PATCH "http://localhost:3000/users/e3b41036-95e8-45c0-9183-8c40ee764df2"
 
 ```json
 {
-    "user": {
-        "id": "e3b41036-95e8-45c0-9183-8c40ee764df2",
-        "email": "david@castellar.com",
-        "password": "mypass",
-        "names": "David Antonio",
-        "lastNames": "David R",
-        "associations": [],
-        "units": []
-    }
+  "user": {
+    "id": "e3b41036-95e8-45c0-9183-8c40ee764df2",
+    "email": "david@castellar.com",
+    "password": "mypass",
+    "names": "David Antonio",
+    "lastNames": "David R",
+    "associations": [],
+    "units": []
+  }
 }
 ```
 
@@ -243,19 +250,20 @@ curl -X DELETE "http://localhost:3000/users/e3b41036-95e8-45c0-9183-8c40ee764df2
 ```
 
 **Response:**
-Not respose
 
-### 6. The same applies for the rest of resources:
+Returns HTTP 204 No Content (no response body).
 
-**UNITS** `/units`
+### 6. Other Resources:
 
-**ASSOCIATIONS** `/associations`
+**Units** `/units`
 
-**AMENITIES** `/amenities`
+**Associations** `/associations`
 
-**BOOKINGS** `/bookings`
+**Amenities** `/amenities`
 
-There is middlewares in every route that give information about the required field in the json body to create/update these resources.
+**Bookings** `/bookings`
+
+Middleware on each route provides details about required fields in the JSON body for creating or updating these resources.
 
 ## Technical Justification
 
@@ -272,13 +280,12 @@ There is middlewares in every route that give information about the required fie
 
 ---
 
-## Pending to immplement:
+## Pending Implementation
 
-### PostgresSQL integragion
-### User authentication
-### Databases interoperation
+### PostgresSQL Integration
+### User Authentication
+### Databases Interoperability (e.g., using both MongoDB and PostgreSQL simultaneously)
 
 ## Author  
-**David Castellar Martínez** [[GitHub](https://github.com/castellarmartinez/)]  
-[[LinkedIn](https://www.linkedin.com/in/castellarmartinez/)]
+**David Castellar Martínez** [[GitHub](https://github.com/castellarmartinez/)]  [[LinkedIn](https://www.linkedin.com/in/castellarmartinez/)]
 
