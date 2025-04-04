@@ -16,11 +16,11 @@ export class UnitController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, association, users } = req.body;
+      const { name, associationId, users } = req.body;
 
       const unit = await this.createUnitUseCase.execute(
         name,
-        association,
+        associationId,
         users
       );
 

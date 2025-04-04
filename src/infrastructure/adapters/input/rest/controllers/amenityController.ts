@@ -22,7 +22,7 @@ export class AmenityController {
         bookable,
         openingTime,
         closingTime,
-        association,
+        associationId,
       } = req.body;
 
       const amenity = await this.createAmenityUseCase.execute(
@@ -31,7 +31,7 @@ export class AmenityController {
         bookable,
         openingTime,
         closingTime,
-        association
+        associationId
       );
 
       res.status(201).json({
