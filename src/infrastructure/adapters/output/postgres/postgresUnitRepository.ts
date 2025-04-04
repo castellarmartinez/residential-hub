@@ -3,6 +3,7 @@ import { Unit } from "../../../../domain/entities/unit";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { PostgresAssociation } from "./postgresAssociationModel";
 import { PostgresUnit } from "./postgresUnitModel";
+import { PostgresUser } from "./postgresUserModel";
 
 export class PostgresUnitRepository implements UnitOutputPort {
   async save(unit: Unit): Promise<void> {
@@ -21,6 +22,11 @@ export class PostgresUnitRepository implements UnitOutputPort {
           as: "association",
           attributes: { exclude: ["units", "users"] },
         },
+        {
+          model: PostgresUser,
+          as: "users",
+          attributes: { exclude: ["units", "associations"] },
+        },
       ],
     });
 
@@ -30,7 +36,8 @@ export class PostgresUnitRepository implements UnitOutputPort {
       return new Unit(
         unitData.id,
         unitData.name,
-        unitData.association ?? undefined
+        unitData.association ?? undefined,
+        unitData.users ?? undefined
       );
     });
   }
@@ -53,7 +60,8 @@ export class PostgresUnitRepository implements UnitOutputPort {
       return new Unit(
         unitData.id,
         unitData.name,
-        unitData.association ?? undefined
+        unitData.association ?? undefined,
+        unitData.users ?? undefined
       );
     }
 

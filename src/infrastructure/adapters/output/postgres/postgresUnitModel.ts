@@ -1,7 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { sequelize } from "../../../../config/postgreSQL";
-import { PostgresAssociation } from "./postgresAssociationModel";
-import { PostgresUser } from "./postgresUserModel";
 
 interface IUnit {
   id: string;
@@ -10,7 +8,7 @@ interface IUnit {
 }
 
 const defineUnitModel = (sequelize: Sequelize) => {
-  const Unit = sequelize.define<Model<IUnit>>(
+  return sequelize.define<Model<IUnit>>(
     "Unit",
     {
       id: {
@@ -36,19 +34,6 @@ const defineUnitModel = (sequelize: Sequelize) => {
       timestamps: false,
     }
   );
-
-  Unit.belongsTo(PostgresAssociation, {
-    foreignKey: "associationId",
-    as: "association",
-  });
-
-  Unit.belongsToMany(PostgresUser, {
-    through: "unit_users",
-    foreignKey: "unitId",
-    as: "users",
-  });
-
-  return Unit;
 };
 
 export const PostgresUnit = defineUnitModel(sequelize);
