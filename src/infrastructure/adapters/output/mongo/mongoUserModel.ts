@@ -6,6 +6,8 @@ interface IUser {
   password: string;
   names?: string;
   lastNames?: string;
+  associations?: string[];
+  units?: string[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -29,6 +31,18 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: false,
   },
+  associations: [
+    {
+      type: String,
+      ref: "Association",
+    },
+  ],
+  units: [
+    {
+      type: String,
+      ref: "Unit",
+    },
+  ],
 });
 
 export const MongoUser = model<IUser>("User", userSchema);

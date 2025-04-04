@@ -7,11 +7,15 @@ export class AssociationMiddleware {
   private readonly creationSchema = Joi.object({
     name: Joi.string().strict().required(),
     address: Joi.string().strict(),
+    units: Joi.array().items(Joi.string().strict()),
+    users: Joi.array().items(Joi.string().strict()),
   });
 
   private readonly updateSchema = Joi.object({
     name: Joi.string().strict(),
     address: Joi.string().strict(),
+    units: Joi.array().items(Joi.string().strict()),
+    users: Joi.array().items(Joi.string().strict()),
   });
 
   validateCreationFields = (

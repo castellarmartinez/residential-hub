@@ -7,6 +7,9 @@ export class BookingMiddleware {
     date: Joi.string().strict(),
     timeStart: Joi.string().strict(),
     timeEnd: Joi.string().strict(),
+    userId: Joi.string().strict(),
+    associationId: Joi.string().strict(),
+    amenityId: Joi.string().strict(),
   });
 
   validateCreationFields = (

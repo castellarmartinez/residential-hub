@@ -9,24 +9,40 @@ export class MongoAssociationRepository implements AssociationOutputPort {
       _id: association.getId(),
       name: association.getName(),
       address: association.getAddress(),
+      units: association.getUnits(),
+      users: association.getUsers(),
     });
   }
 
   async findAll(): Promise<Association[]> | never {
-    return (await MongoAssociation.find({})).map(
+    const associations = await MongoAssociation.find({})
+      .populate({ path: "users", select: "-units -associations -__v" })
+      .populate({ path: "units", select: "-associationId -users -__v" });
+
+    return associations.map(
       (association) =>
-        new Association(association._id, association.name, association.address)
+        new Association(
+          association._id,
+          association.name,
+          association.address,
+          association.units,
+          association.users
+        )
     );
   }
 
   async findById(id: string): Promise<Association> | never {
-    const association = await MongoAssociation.findOne({ _id: id });
+    const association = await MongoAssociation.findOne({ _id: id })
+      .populate({ path: "users", select: "-units -associations -__v" })
+      .populate({ path: "units", select: "-associationId -users -__v" });
 
     if (association) {
       return new Association(
         association._id,
         association.name,
-        association.address
+        association.address,
+        association.units,
+        association.users
       );
     }
 
@@ -50,12 +66,16 @@ export class MongoAssociationRepository implements AssociationOutputPort {
     return new Association(
       updatedAssociation._id,
       updatedAssociation.name,
-      updatedAssociation.address
+      updatedAssociation.address,
+      updatedAssociation.units,
+      updatedAssociation.users
     );
   }
 
   async delete(id: string): Promise<void> | never {
-    const association = await MongoAssociation.findByIdAndDelete({ _id: id });
+    const association = await MongoAssociation.findByIdAndDelete({ _id: id })
+      .populate({ path: "users", select: "-units -associations -__v" })
+      .populate({ path: "units", select: "-associationId -users -__v" });
 
     if (!association) {
       throw new NotFoundError(`Association with id=${id} does not exist`);

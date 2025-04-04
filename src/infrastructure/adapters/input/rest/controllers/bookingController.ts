@@ -16,12 +16,16 @@ export class BookingController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { date, timeStart, timeEnd } = req.body;
+      const { date, timeStart, timeEnd, userId, amenityId, associationId } =
+        req.body;
 
       const booking = await this.createBookingUseCase.execute(
         date,
         timeStart,
-        timeEnd
+        timeEnd,
+        userId,
+        amenityId,
+        associationId
       );
 
       res.status(201).json({
@@ -32,9 +36,12 @@ export class BookingController {
     }
   };
 
-  getAll = async (_req: Request, res: Response, next: NextFunction) => {
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const bookings = await this.getBookingsUseCase.execute();
+      const { association } = req.query;
+      const bookings = await this.getBookingsUseCase.execute(
+        association as string
+      );
 
       res.status(200).json({
         bookings,
