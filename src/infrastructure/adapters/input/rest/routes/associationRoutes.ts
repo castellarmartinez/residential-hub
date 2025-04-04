@@ -5,14 +5,15 @@ import { DeleteAssociationInputPort } from "../../../../../application/ports/inp
 import { GetAssociationByIdInputPort } from "../../../../../application/ports/input/association/getAssociationByIdInputPort";
 import { GetAssociationsInputPort } from "../../../../../application/ports/input/association/getAssociationsInputPort";
 import { UpdateAssociationInputPort } from "../../../../../application/ports/input/association/updateAssociationInputPort";
-import { MongoAssociationRepository } from "../../../output/mongo/mongoAssociationRepository";
+import { PostgresAssociationRepository } from "../../../output/postgres/postgresAssociationRepository";
 import { AssociationController } from "../controllers/associationController";
-import { validateId } from "../middlewares/validateParamsId";
 import { AssociationMiddleware } from "../middlewares/associationMiddleware";
+import { validateId } from "../middlewares/validateParamsId";
 
 export const associationRouter = express.Router();
 
-const associationRepository = new MongoAssociationRepository();
+// const associationRepository = new MongoAssociationRepository();
+const associationRepository = new PostgresAssociationRepository();
 
 const createAssociationUseCase = new CreateAssociationInputPort(
   associationRepository
