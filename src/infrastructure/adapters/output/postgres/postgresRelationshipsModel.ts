@@ -1,6 +1,6 @@
-import { PostgresUser } from "./postgresUserModel";
-import { PostgresUnit } from "./postgresUnitModel";
 import { PostgresAssociation } from "./postgresAssociationModel";
+import { PostgresUnit } from "./postgresUnitModel";
+import { PostgresUser } from "./postgresUserModel";
 
 export const associateModels = () => {
   PostgresUser.belongsToMany(PostgresAssociation, {
@@ -8,6 +8,7 @@ export const associateModels = () => {
     foreignKey: "userId",
     otherKey: "associationId",
     as: "associations",
+    timestamps: false,
   });
 
   PostgresAssociation.belongsToMany(PostgresUser, {
@@ -15,6 +16,7 @@ export const associateModels = () => {
     foreignKey: "associationId",
     otherKey: "userId",
     as: "users",
+    timestamps: false,
   });
 
   PostgresUser.belongsToMany(PostgresUnit, {
@@ -22,6 +24,7 @@ export const associateModels = () => {
     foreignKey: "userId",
     otherKey: "unitId",
     as: "units",
+    timestamps: false,
   });
 
   PostgresUnit.belongsToMany(PostgresUser, {
@@ -29,6 +32,7 @@ export const associateModels = () => {
     foreignKey: "unitId",
     otherKey: "userId",
     as: "users",
+    timestamps: false,
   });
 
   PostgresUnit.belongsTo(PostgresAssociation, {

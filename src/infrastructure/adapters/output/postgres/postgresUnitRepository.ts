@@ -1,31 +1,44 @@
 import { UnitOutputPort } from "../../../../application/ports/output/unitOutputPort";
 import { Unit } from "../../../../domain/entities/unit";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
-import { PostgresAssociation } from "./postgresAssociationModel";
 import { PostgresUnit } from "./postgresUnitModel";
 import { PostgresUser } from "./postgresUserModel";
 
 export class PostgresUnitRepository implements UnitOutputPort {
   async save(unit: Unit): Promise<void> {
-    await PostgresUnit.create({
+    const createdUnit = await PostgresUnit.create({
       id: unit.getId(),
       name: unit.getName(),
       associationId: unit.getAssociationId(),
     });
+
+    const users = unit.getUsers();
+
+    if (users && users.length > 0) {
+      const existingUsers = await PostgresUser.findAll({
+        where: { id: users },
+        attributes: ["id"],
+      });
+
+      const validUserIds = existingUsers.map((user) => user.getDataValue("id"));
+      if (validUserIds.length > 0) {
+        await createdUnit.setUsers(validUserIds);
+      }
+    }
   }
 
   async findAll(): Promise<Unit[]> | never {
     const units = await PostgresUnit.findAll({
       include: [
         {
-          model: PostgresAssociation,
-          as: "association",
-          attributes: { exclude: ["units", "users"] },
-        },
-        {
           model: PostgresUser,
           as: "users",
-          attributes: { exclude: ["units", "associations"] },
+          attributes: {
+            exclude: ["units", "associations"],
+          },
+          through: {
+            attributes: [],
+          },
         },
       ],
     });
@@ -45,13 +58,6 @@ export class PostgresUnitRepository implements UnitOutputPort {
   async findById(id: string): Promise<Unit> | never {
     const unit = await PostgresUnit.findOne({
       where: { id },
-      include: [
-        {
-          model: PostgresAssociation,
-          as: "association",
-          attributes: { exclude: ["units", "users"] },
-        },
-      ],
     });
 
     if (unit) {
@@ -73,17 +79,21 @@ export class PostgresUnitRepository implements UnitOutputPort {
     fieldsToUpdate: Partial<Unit>
   ): Promise<Unit> | never {
     const query = fieldsToUpdate as Record<string, unknown>;
+    const { users, ...unitFields } = query;
+    let unitData = {} as any;
 
-    const [affectedRows, updatedUnits] = await PostgresUnit.update(query, {
-      where: { id },
-      returning: true,
-    });
+    if (Object.keys(unitFields).length > 0) {
+      const [affectedRows, updatedUnits] = await PostgresUnit.update(query, {
+        where: { id },
+        returning: true,
+      });
 
-    if (affectedRows === 0 || !updatedUnits[0]) {
-      throw new NotFoundError(`Unit with id=${id} does not exist`);
+      if (affectedRows === 0 || !updatedUnits[0]) {
+        throw new NotFoundError(`Unit with id=${id} does not exist`);
+      }
+
+      unitData = updatedUnits[0].toJSON();
     }
-
-    const unitData = updatedUnits[0].toJSON();
 
     return new Unit(unitData.id, unitData.name, unitData.associationId);
   }

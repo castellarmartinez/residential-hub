@@ -9,7 +9,7 @@ interface IUser {
   lastNames?: string;
 }
 
-const defineUserModel = (sequelize: Sequelize) => {
+export const defineUserModel = (sequelize: Sequelize) => {
   return sequelize.define<Model<IUser>>(
     "User",
     {

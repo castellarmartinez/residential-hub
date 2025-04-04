@@ -1,4 +1,6 @@
 import { Sequelize } from "sequelize";
+import fs from "node:fs";
+import path from "node:path";
 
 import config from "./env";
 
@@ -39,7 +41,7 @@ export async function connectToPostgresDatabase() {
 
     await systemSequelize.close(); // Close the system connection to connect the project database
     await sequelize.authenticate();
-    await sequelize.sync({ force: false });
+    await createTables();
     console.info("Connected to PostgreSQL database.");
   } catch (error) {
     if (error instanceof Error) {
@@ -63,5 +65,16 @@ export async function disconnectFromPostgresDatabase() {
     }
 
     console.error(error);
+  }
+}
+
+async function createTables() {
+  try {
+    const schemaPath = path.resolve(__dirname, "../migrations/schema.sql");
+    const sql = fs.readFileSync(schemaPath, "utf-8");
+
+    await sequelize.query(sql);
+  } catch (error) {
+    console.error("Error running schema SQL:", error);
   }
 }

@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import { sequelize } from "../../../../config/postgreSQL";
 
 interface IUnit {
@@ -7,8 +7,16 @@ interface IUnit {
   associationId?: string;
 }
 
-const defineUnitModel = (sequelize: Sequelize) => {
-  return sequelize.define<Model<IUnit>>(
+export interface UnitInstance
+  extends Model<IUnit, Optional<IUnit, "associationId">>,
+    IUnit {
+  setUsers: (users: string[]) => Promise<void>;
+  addUser: (userId: string) => Promise<void>;
+  addUsers: (userIds: string[]) => Promise<void>;
+}
+
+export const defineUnitModel = (sequelize: Sequelize) => {
+  return sequelize.define<UnitInstance>(
     "Unit",
     {
       id: {

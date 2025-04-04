@@ -7,7 +7,7 @@ interface IAssociation {
   address?: string;
 }
 
-const defineAssociationModel = (sequelize: Sequelize) => {
+export const defineAssociationModel = (sequelize: Sequelize) => {
   return sequelize.define<Model<IAssociation>>(
     "Association",
     {
