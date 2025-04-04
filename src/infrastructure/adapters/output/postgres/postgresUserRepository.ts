@@ -3,7 +3,7 @@ import { User } from "../../../../domain/entities/user";
 import { NotFoundError } from "../../../../domain/errors/notFoundError";
 import { PostgresUser } from "./postgresUserModel";
 
-export class PostgresUserRepository implements Partial<UserOutputPort> {
+export class PostgresUserRepository implements UserOutputPort {
   async save(user: User): Promise<void> {
     await PostgresUser.create({
       id: user.getId(),

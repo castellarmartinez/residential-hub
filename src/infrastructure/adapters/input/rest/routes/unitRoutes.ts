@@ -1,5 +1,5 @@
 import express from "express";
-import { MongoUnitRepository } from "../../../output/mongo/mongoUnitRepository";
+// import { MongoUnitRepository } from "../../../output/mongo/mongoUnitRepository";
 import { validateId } from "../middlewares/validateParamsId";
 import { UnitController } from "../controllers/unitController";
 import { DeleteUnitInputPort } from "../../../../../application/ports/input/unit/deleteUnitInputPort";
@@ -8,10 +8,12 @@ import { GetUnitsInputPort } from "../../../../../application/ports/input/unit/g
 import { CreateUnitInputPort } from "../../../../../application/ports/input/unit/createUnitInputPort";
 import { UpdateUnitInputPort } from "../../../../../application/ports/input/unit/updateUnitInputPort";
 import { UnitMiddleware } from "../middlewares/unitMiddleware";
+import { PostgresUnitRepository } from "../../../output/postgres/postgresUnitRepository";
 
 export const unitRouter = express.Router();
 
-const unitRepository = new MongoUnitRepository();
+// const unitRepository = new MongoUnitRepository();
+const unitRepository = new PostgresUnitRepository();
 
 const createUnitUseCase = new CreateUnitInputPort(unitRepository);
 const getUnitsUseCase = new GetUnitsInputPort(unitRepository);
