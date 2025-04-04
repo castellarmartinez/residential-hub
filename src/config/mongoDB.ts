@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import config from "./env";
 
 export async function connectToDatabase() {
-  const uri = config.MONGO_URL;
+  const uri = config.MONGO_URI + config.DB_NAME;
 
   try {
     await mongoose.connect(uri);
